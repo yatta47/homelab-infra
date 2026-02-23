@@ -84,6 +84,18 @@ variable "vm_memory" {
   default     = 4096
 }
 
+variable "vm_disk_size" {
+  description = "各VMのディスクサイズ (GB)"
+  type        = number
+  default     = 100
+}
+
+variable "vm_disk_datastore_id" {
+  description = "VMディスクを配置するProxmoxデータストア"
+  type        = string
+  default     = "local-lvm"
+}
+
 variable "snippet_datastore_id" {
   description = "cloud-init snippetを保存するProxmoxデータストア"
   type        = string
