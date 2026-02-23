@@ -9,3 +9,6 @@ terraform.tfvars
 .env
 *.pem
 *.key
+
+# Temporary files
+tmp/
