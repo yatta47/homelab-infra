@@ -31,14 +31,18 @@ Traefik を先にインストールする理由: ArgoCD UI の Ingress に必要
 
 ## ブートストラップ手順（CPノードで実行）
 
-> **注意**: helm / kubectl コマンドに `sudo` を付けているのは、k3s の kubeconfig (`/etc/rancher/k3s/k3s.yaml`) が root 所有のため。
+> **注意**: k3s の kubeconfig (`/etc/rancher/k3s/k3s.yaml`) が root 所有のため、`sudo` + `KUBECONFIG` 環境変数の指定が必要。以下のエクスポートを最初に実行しておくと各コマンドで毎回指定する手間が省ける。
+
+```bash
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+```
 
 ### 1. Traefik インストール
 
 ```bash
-sudo helm repo add traefik https://traefik.github.io/charts
-sudo helm repo update
-sudo helm install traefik traefik/traefik \
+sudo -E helm repo add traefik https://traefik.github.io/charts
+sudo -E helm repo update
+sudo -E helm install traefik traefik/traefik \
   --namespace traefik --create-namespace \
   --version 39.0.2 \
   -f /path/to/gitops/bootstrap/traefik/values.yaml \
@@ -48,16 +52,16 @@ sudo helm install traefik traefik/traefik \
 確認:
 
 ```bash
-kubectl get pods -n traefik
-kubectl get svc -n traefik    # EXTERNAL-IP が MetalLB から割り当てられること
+sudo kubectl get pods -n traefik
+sudo kubectl get svc -n traefik    # EXTERNAL-IP が MetalLB から割り当てられること
 ```
 
 ### 2. ArgoCD インストール
 
 ```bash
-sudo helm repo add argo https://argoproj.github.io/argo-helm
-sudo helm repo update
-sudo helm install argocd argo/argo-cd \
+sudo -E helm repo add argo https://argoproj.github.io/argo-helm
+sudo -E helm repo update
+sudo -E helm install argocd argo/argo-cd \
   --namespace argocd --create-namespace \
   --version 9.4.4 \
   -f /path/to/gitops/bootstrap/argocd/values.yaml \
