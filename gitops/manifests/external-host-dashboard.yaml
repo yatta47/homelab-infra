@@ -433,6 +433,175 @@ data:
               }
             }
           ]
+        },
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 32 },
+          "id": 104,
+          "title": "ユーザー タイマー (systemd --user)",
+          "type": "row"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "red", "value": 1 }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 4, "w": 6, "x": 0, "y": 33 },
+          "id": 10,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "title": "Failed Units (user)",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "count(systemd_unit_state{job=\"external-systemd-user\",state=\"failed\"} == 1) or vector(0)",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": [
+              {
+                "matcher": { "id": "byName", "options": "最終実行" },
+                "properties": [
+                  { "id": "unit", "value": "dateTimeFromNow" }
+                ]
+              },
+              {
+                "matcher": { "id": "byName", "options": "State" },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      { "options": { "1": { "text": "active", "color": "green" }, "0": { "text": "inactive", "color": "red" } }, "type": "value" }
+                    ]
+                  },
+                  { "id": "custom.cellOptions", "value": { "type": "color-background" } }
+                ]
+              }
+            ]
+          },
+          "gridPos": { "h": 8, "w": 18, "x": 6, "y": 33 },
+          "id": 11,
+          "options": {
+            "showHeader": true,
+            "sortBy": [{ "displayName": "Timer", "desc": false }],
+            "footer": { "show": false }
+          },
+          "title": "ユーザータイマー一覧",
+          "type": "table",
+          "targets": [
+            {
+              "expr": "systemd_unit_state{job=\"external-systemd-user\",state=\"active\",type=\"timer\"}",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "__name__": true,
+                  "instance": true,
+                  "job": true,
+                  "state": true,
+                  "type": true
+                },
+                "renameByName": {
+                  "name": "Timer",
+                  "Value": "State"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": [
+              {
+                "matcher": { "id": "byName", "options": "最終実行からの経過" },
+                "properties": [
+                  { "id": "unit", "value": "s" },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        { "color": "green", "value": null },
+                        { "color": "yellow", "value": 86400 },
+                        { "color": "red", "value": 172800 }
+                      ]
+                    }
+                  },
+                  { "id": "custom.cellOptions", "value": { "type": "color-background" } }
+                ]
+              }
+            ]
+          },
+          "gridPos": { "h": 8, "w": 24, "x": 0, "y": 41 },
+          "id": 12,
+          "options": {
+            "showHeader": true,
+            "sortBy": [{ "displayName": "最終実行からの経過", "desc": true }],
+            "footer": { "show": false }
+          },
+          "title": "タイマー最終実行",
+          "type": "table",
+          "targets": [
+            {
+              "expr": "time() - systemd_timer_last_trigger_seconds{job=\"external-systemd-user\"}",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "__name__": true,
+                  "instance": true,
+                  "job": true
+                },
+                "renameByName": {
+                  "name": "Timer",
+                  "Value": "最終実行からの経過"
+                }
+              }
+            }
+          ]
         }
       ],
       "schemaVersion": 39,

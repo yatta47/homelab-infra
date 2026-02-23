@@ -45,6 +45,11 @@ spec:
                   - targets: ["192.168.100.17:9558"]
                     labels:
                       instance: "devbox"
+              - job_name: "external-systemd-user"
+                static_configs:
+                  - targets: ["192.168.100.17:9559"]
+                    labels:
+                      instance: "devbox"
 
         # --- Grafana ---
         grafana:
