@@ -112,6 +112,9 @@ sudo kubectl apply -f /path/to/gitops/apps/root-app.yaml
 | 3 | ArgoCD Pod Running | `kubectl get pods -n argocd` |
 | 4 | ArgoCD UI アクセス | `curl http://argocd.homelab.local` |
 | 5 | Root Application 同期 | `kubectl get applications -n argocd` |
+| 6 | kube-prometheus-stack Pod Running | `kubectl get pods -n monitoring` |
+| 7 | Prometheus PVC バインド | `kubectl get pvc -n monitoring` |
+| 8 | Grafana UI アクセス | `http://grafana.homelab.local` (admin / prom-operator) |
 
 ## 備考
 
