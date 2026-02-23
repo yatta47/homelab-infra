@@ -1,0 +1,23 @@
+# Proxmox接続
+proxmox_endpoint  = "https://192.168.100.1:8006/"
+proxmox_api_token = "root@pam!terraform=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+proxmox_node      = "home"
+
+# テンプレート
+template_vm_id = 9000
+
+# ネットワーク
+network_bridge = "vnet1"
+gateway        = "192.168.100.1"
+dns_servers    = ["8.8.8.8", "1.1.1.1"]
+
+# k3s VM IP
+k3s_cp_ip      = "192.168.100.101"
+k3s_worker_ips = ["192.168.100.102", "192.168.100.103"]
+
+# VM設定
+vm_user = "ubuntu"
+ssh_public_keys = [
+  "ssh-ed25519 AAAA... user@server",
+  "ssh-ed25519 AAAA... user@macbook",
+]
