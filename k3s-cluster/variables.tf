@@ -10,6 +10,12 @@ variable "proxmox_api_token" {
   sensitive   = true
 }
 
+variable "proxmox_insecure" {
+  description = "Proxmox APIのTLS証明書検証をスキップする（自己署名証明書用）"
+  type        = bool
+  default     = false
+}
+
 variable "proxmox_node" {
   description = "Proxmoxノード名"
   type        = string
@@ -21,6 +27,11 @@ variable "template_vm_id" {
   description = "cloud-initテンプレートのVMID"
   type        = number
   default     = 9000
+
+  validation {
+    condition     = var.template_vm_id > 0 && var.template_vm_id < 999999999
+    error_message = "template_vm_id は正の整数で指定してください。"
+  }
 }
 
 # --- ネットワーク ---
@@ -47,12 +58,36 @@ variable "k3s_cp_ip" {
   description = "k3s Control PlaneのIP"
   type        = string
   default     = "192.168.100.101"
+
+  validation {
+    condition     = can(regex("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$", var.k3s_cp_ip))
+    error_message = "k3s_cp_ip は有効なIPv4アドレス形式で指定してください。"
+  }
 }
 
 variable "k3s_worker_ips" {
   description = "k3s WorkerのIPリスト"
   type        = list(string)
   default     = ["192.168.100.102", "192.168.100.103"]
+}
+
+# --- VM スペック ---
+variable "vm_cpu_cores" {
+  description = "各VMのCPUコア数"
+  type        = number
+  default     = 2
+}
+
+variable "vm_memory" {
+  description = "各VMのメモリ (MB)"
+  type        = number
+  default     = 4096
+}
+
+variable "snippet_datastore_id" {
+  description = "cloud-init snippetを保存するProxmoxデータストア"
+  type        = string
+  default     = "local"
 }
 
 # --- VM設定 ---
@@ -68,6 +103,18 @@ variable "ssh_public_keys" {
 }
 
 # --- k3s ---
+variable "k3s_version" {
+  description = "k3sのバージョン (例: v1.31.4+k3s1)"
+  type        = string
+  default     = "v1.31.4+k3s1"
+}
+
+variable "helm_version" {
+  description = "Helmのバージョン (例: v3.17.1)"
+  type        = string
+  default     = "v3.17.1"
+}
+
 variable "metallb_address_range" {
   description = "MetalLB L2モードで割り当てるIPレンジ"
   type        = string

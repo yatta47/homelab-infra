@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.0"
+  required_version = ">= 1.5, < 2.0"
 
   required_providers {
     proxmox = {
@@ -16,7 +16,7 @@ terraform {
 provider "proxmox" {
   endpoint  = var.proxmox_endpoint
   api_token = var.proxmox_api_token
-  insecure  = true # 自己署名証明書
+  insecure  = var.proxmox_insecure
 
   ssh {
     agent    = true
@@ -52,7 +52,7 @@ locals {
 resource "proxmox_virtual_environment_file" "cloud_config" {
   for_each     = local.nodes
   content_type = "snippets"
-  datastore_id = "local"
+  datastore_id = var.snippet_datastore_id
   node_name    = var.proxmox_node
 
   source_raw {
@@ -63,6 +63,8 @@ resource "proxmox_virtual_environment_file" "cloud_config" {
       role                  = each.value.role
       cp_ip                 = var.k3s_cp_ip
       k3s_token             = random_password.k3s_token.result
+      k3s_version           = var.k3s_version
+      helm_version          = var.helm_version
       metallb_address_range = var.metallb_address_range
       cilium_version        = var.cilium_version
     })
@@ -86,11 +88,11 @@ resource "proxmox_virtual_environment_vm" "k3s" {
   }
 
   cpu {
-    cores = 2
+    cores = var.vm_cpu_cores
   }
 
   memory {
-    dedicated = 4096
+    dedicated = var.vm_memory
   }
 
   network_device {

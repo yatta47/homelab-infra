@@ -42,11 +42,12 @@ cloud-initでk3s / Cilium / MetalLB のインストールまで自動化。
 ## 使い方
 
 ```bash
-cd scaffolding/projects/homelab-infra/k3s-cluster
+cd k3s-cluster
 
 # 1. 設定ファイル作成
 cp terraform.tfvars.example terraform.tfvars
 # terraform.tfvars を編集（APIトークン、SSH公開鍵を設定）
+# ⚠ terraform.tfvars にはAPIトークン等の機密情報を含むため、Gitにコミットしないこと
 
 # 2. 初期化
 terraform init
