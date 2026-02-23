@@ -1,0 +1,514 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: proxmox-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  proxmox-dashboard.json: |
+    {
+      "annotations": {
+        "list": []
+      },
+      "editable": false,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 1,
+      "links": [],
+      "panels": [
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+          "id": 100,
+          "title": "概要",
+          "type": "row"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null }
+                ]
+              },
+              "unit": "dtdurations"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
+          "id": 1,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "title": "Uptime",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "pve_node_info{job=\"proxmox-pve\"} * on(id) group_left() (time() - pve_uptime_seconds{job=\"proxmox-pve\"})",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 50 },
+                  { "color": "red", "value": 80 }
+                ]
+              },
+              "unit": "percent",
+              "min": 0,
+              "max": 100
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
+          "id": 2,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "title": "CPU 使用率",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "pve_cpu_usage_ratio{job=\"proxmox-pve\",id=~\"node/.*\"} * 100",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 60 },
+                  { "color": "red", "value": 85 }
+                ]
+              },
+              "unit": "percent",
+              "min": 0,
+              "max": 100
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 4, "w": 6, "x": 12, "y": 1 },
+          "id": 3,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true
+          },
+          "title": "メモリ使用率",
+          "type": "gauge",
+          "targets": [
+            {
+              "expr": "pve_memory_usage_bytes{job=\"proxmox-pve\",id=~\"node/.*\"} / pve_memory_size_bytes{job=\"proxmox-pve\",id=~\"node/.*\"} * 100",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 70 },
+                  { "color": "red", "value": 90 }
+                ]
+              },
+              "unit": "percent",
+              "min": 0,
+              "max": 100
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
+          "id": 4,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true
+          },
+          "title": "ストレージ使用率",
+          "type": "gauge",
+          "targets": [
+            {
+              "expr": "pve_disk_usage_bytes{job=\"proxmox-pve\",id=~\"node/.*\"} / pve_disk_size_bytes{job=\"proxmox-pve\",id=~\"node/.*\"} * 100",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+          "id": 101,
+          "title": "ノード推移",
+          "type": "row"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisLabel": "",
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": { "group": "A", "mode": "none" }
+              },
+              "unit": "percent",
+              "min": 0,
+              "max": 100
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+          "id": 5,
+          "options": {
+            "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom" },
+            "tooltip": { "mode": "single", "sort": "none" }
+          },
+          "title": "CPU 使用率",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "pve_cpu_usage_ratio{job=\"proxmox-pve\",id=~\"node/.*\"} * 100",
+              "legendFormat": "{{id}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisLabel": "",
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": { "group": "A", "mode": "none" }
+              },
+              "unit": "percent",
+              "min": 0,
+              "max": 100
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+          "id": 6,
+          "options": {
+            "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom" },
+            "tooltip": { "mode": "single", "sort": "none" }
+          },
+          "title": "メモリ使用率",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "pve_memory_usage_bytes{job=\"proxmox-pve\",id=~\"node/.*\"} / pve_memory_size_bytes{job=\"proxmox-pve\",id=~\"node/.*\"} * 100",
+              "legendFormat": "{{id}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 },
+          "id": 102,
+          "title": "VM / CT 一覧",
+          "type": "row"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": [
+              {
+                "matcher": { "id": "byName", "options": "Status" },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      { "options": { "1": { "text": "running", "color": "green" }, "0": { "text": "stopped", "color": "red" } }, "type": "value" }
+                    ]
+                  },
+                  { "id": "custom.cellOptions", "value": { "type": "color-background" } }
+                ]
+              },
+              {
+                "matcher": { "id": "byName", "options": "CPU %" },
+                "properties": [
+                  { "id": "unit", "value": "percent" },
+                  { "id": "decimals", "value": 1 }
+                ]
+              },
+              {
+                "matcher": { "id": "byName", "options": "Memory %" },
+                "properties": [
+                  { "id": "unit", "value": "percent" },
+                  { "id": "decimals", "value": 1 }
+                ]
+              },
+              {
+                "matcher": { "id": "byName", "options": "Disk" },
+                "properties": [
+                  { "id": "unit", "value": "bytes" }
+                ]
+              },
+              {
+                "matcher": { "id": "byName", "options": "Net In" },
+                "properties": [
+                  { "id": "unit", "value": "Bps" }
+                ]
+              },
+              {
+                "matcher": { "id": "byName", "options": "Net Out" },
+                "properties": [
+                  { "id": "unit", "value": "Bps" }
+                ]
+              }
+            ]
+          },
+          "gridPos": { "h": 10, "w": 24, "x": 0, "y": 15 },
+          "id": 7,
+          "options": {
+            "showHeader": true,
+            "sortBy": [{ "displayName": "Name", "desc": false }],
+            "footer": { "show": false }
+          },
+          "title": "VM / CT 一覧",
+          "type": "table",
+          "targets": [
+            {
+              "expr": "pve_up_status{job=\"proxmox-pve\",id=~\"(qemu|lxc)/.*\"}",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "",
+              "refId": "A"
+            },
+            {
+              "expr": "pve_cpu_usage_ratio{job=\"proxmox-pve\",id=~\"(qemu|lxc)/.*\"} * 100",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "",
+              "refId": "B"
+            },
+            {
+              "expr": "pve_memory_usage_bytes{job=\"proxmox-pve\",id=~\"(qemu|lxc)/.*\"} / pve_memory_size_bytes{job=\"proxmox-pve\",id=~\"(qemu|lxc)/.*\"} * 100",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "",
+              "refId": "C"
+            },
+            {
+              "expr": "pve_disk_usage_bytes{job=\"proxmox-pve\",id=~\"(qemu|lxc)/.*\"}",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "",
+              "refId": "D"
+            },
+            {
+              "expr": "rate(pve_network_receive_bytes{job=\"proxmox-pve\",id=~\"(qemu|lxc)/.*\"}[5m])",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "",
+              "refId": "E"
+            },
+            {
+              "expr": "rate(pve_network_transmit_bytes{job=\"proxmox-pve\",id=~\"(qemu|lxc)/.*\"}[5m])",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "",
+              "refId": "F"
+            }
+          ],
+          "transformations": [
+            {
+              "id": "seriesToColumns",
+              "options": {
+                "byField": "id"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "Time 1": true,
+                  "Time 2": true,
+                  "Time 3": true,
+                  "Time 4": true,
+                  "Time 5": true,
+                  "Time 6": true,
+                  "__name__": true,
+                  "__name__ 1": true,
+                  "__name__ 2": true,
+                  "__name__ 3": true,
+                  "__name__ 4": true,
+                  "__name__ 5": true,
+                  "__name__ 6": true,
+                  "instance": true,
+                  "instance 1": true,
+                  "instance 2": true,
+                  "instance 3": true,
+                  "instance 4": true,
+                  "instance 5": true,
+                  "instance 6": true,
+                  "job": true,
+                  "job 1": true,
+                  "job 2": true,
+                  "job 3": true,
+                  "job 4": true,
+                  "job 5": true,
+                  "job 6": true
+                },
+                "renameByName": {
+                  "id": "Name",
+                  "Value #A": "Status",
+                  "Value #B": "CPU %",
+                  "Value #C": "Memory %",
+                  "Value #D": "Disk",
+                  "Value #E": "Net In",
+                  "Value #F": "Net Out"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 25 },
+          "id": 103,
+          "title": "ストレージ",
+          "type": "row"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisLabel": "",
+                "drawStyle": "bars",
+                "fillOpacity": 80,
+                "gradientMode": "none",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": { "group": "A", "mode": "normal" }
+              },
+              "unit": "bytes"
+            },
+            "overrides": [
+              {
+                "matcher": { "id": "byRegexp", "options": "空き.*" },
+                "properties": [
+                  { "id": "color", "value": { "mode": "fixed", "fixedColor": "light-green" } }
+                ]
+              },
+              {
+                "matcher": { "id": "byRegexp", "options": "使用.*" },
+                "properties": [
+                  { "id": "color", "value": { "mode": "fixed", "fixedColor": "light-red" } }
+                ]
+              }
+            ]
+          },
+          "gridPos": { "h": 8, "w": 24, "x": 0, "y": 26 },
+          "id": 8,
+          "options": {
+            "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom" },
+            "tooltip": { "mode": "single", "sort": "none" }
+          },
+          "title": "ストレージプール使用量",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "pve_disk_usage_bytes{job=\"proxmox-pve\",id=~\"storage/.*\"}",
+              "legendFormat": "使用 {{id}}",
+              "refId": "A"
+            },
+            {
+              "expr": "pve_disk_size_bytes{job=\"proxmox-pve\",id=~\"storage/.*\"} - pve_disk_usage_bytes{job=\"proxmox-pve\",id=~\"storage/.*\"}",
+              "legendFormat": "空き {{id}}",
+              "refId": "B"
+            }
+          ]
+        }
+      ],
+      "schemaVersion": 39,
+      "tags": ["proxmox", "pve"],
+      "templating": { "list": [] },
+      "time": { "from": "now-6h", "to": "now" },
+      "timepicker": {},
+      "timezone": "Asia/Tokyo",
+      "title": "Proxmox Monitoring",
+      "uid": "proxmox-monitoring",
+      "version": 1
+    }

@@ -50,6 +50,16 @@ spec:
                   - targets: ["192.168.100.17:9559"]
                     labels:
                       instance: "devbox"
+              - job_name: "proxmox-pve"
+                metrics_path: /pve
+                params:
+                  target: ["192.168.100.1"]
+                  cluster: ["1"]
+                  node: ["1"]
+                static_configs:
+                  - targets: ["pve-exporter.monitoring.svc:9221"]
+                    labels:
+                      instance: "home"
 
         # --- Grafana ---
         grafana:
