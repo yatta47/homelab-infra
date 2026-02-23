@@ -1,0 +1,504 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-billing-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  aws-billing-dashboard.json: |
+    {
+      "annotations": { "list": [] },
+      "editable": false,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 1,
+      "links": [],
+      "panels": [
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+          "id": 100,
+          "title": "今月の請求概要",
+          "type": "row"
+        },
+        {
+          "datasource": { "type": "cloudwatch", "uid": "cloudwatch" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 10 },
+                  { "color": "red", "value": 50 }
+                ]
+              },
+              "unit": "currencyUSD"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 6, "w": 8, "x": 0, "y": 1 },
+          "id": 1,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "title": "合計請求額 (今月)",
+          "type": "stat",
+          "targets": [
+            {
+              "alias": "",
+              "dimensions": { "Currency": ["USD"] },
+              "expression": "",
+              "matchExact": true,
+              "metricEditorMode": 0,
+              "metricName": "EstimatedCharges",
+              "metricQueryType": 0,
+              "namespace": "AWS/Billing",
+              "period": "86400",
+              "refId": "A",
+              "region": "us-east-1",
+              "statistic": "Maximum"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "cloudwatch", "uid": "cloudwatch" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 5 },
+                  { "color": "red", "value": 30 }
+                ]
+              },
+              "unit": "currencyUSD"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 6, "w": 8, "x": 8, "y": 1 },
+          "id": 2,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "value_and_name"
+          },
+          "title": "管理アカウント (233386024600)",
+          "type": "stat",
+          "targets": [
+            {
+              "alias": "管理アカウント",
+              "dimensions": { "Currency": ["USD"], "LinkedAccount": ["233386024600"] },
+              "expression": "",
+              "matchExact": true,
+              "metricEditorMode": 0,
+              "metricName": "EstimatedCharges",
+              "metricQueryType": 0,
+              "namespace": "AWS/Billing",
+              "period": "86400",
+              "refId": "A",
+              "region": "us-east-1",
+              "statistic": "Maximum"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "cloudwatch", "uid": "cloudwatch" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 5 },
+                  { "color": "red", "value": 30 }
+                ]
+              },
+              "unit": "currencyUSD"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 6, "w": 8, "x": 16, "y": 1 },
+          "id": 3,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "value_and_name"
+          },
+          "title": "メンバーアカウント (016588228762)",
+          "type": "stat",
+          "targets": [
+            {
+              "alias": "メンバーアカウント",
+              "dimensions": { "Currency": ["USD"], "LinkedAccount": ["016588228762"] },
+              "expression": "",
+              "matchExact": true,
+              "metricEditorMode": 0,
+              "metricName": "EstimatedCharges",
+              "metricQueryType": 0,
+              "namespace": "AWS/Billing",
+              "period": "86400",
+              "refId": "A",
+              "region": "us-east-1",
+              "statistic": "Maximum"
+            }
+          ]
+        },
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 7 },
+          "id": 101,
+          "title": "管理アカウント (233386024600) — サービス別",
+          "type": "row"
+        },
+        {
+          "datasource": { "type": "cloudwatch", "uid": "cloudwatch" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisLabel": "",
+                "drawStyle": "bars",
+                "fillOpacity": 80,
+                "gradientMode": "none",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": { "group": "A", "mode": "normal" }
+              },
+              "unit": "currencyUSD"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+          "id": 10,
+          "options": {
+            "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "sortBy": "Last *", "sortDesc": true },
+            "tooltip": { "mode": "multi", "sort": "desc" }
+          },
+          "title": "管理アカウント サービス別推移",
+          "type": "timeseries",
+          "targets": [
+            {
+              "alias": "{{ServiceName}}",
+              "dimensions": { "Currency": ["USD"], "LinkedAccount": ["233386024600"], "ServiceName": ["*"] },
+              "expression": "",
+              "matchExact": true,
+              "metricEditorMode": 0,
+              "metricName": "EstimatedCharges",
+              "metricQueryType": 0,
+              "namespace": "AWS/Billing",
+              "period": "86400",
+              "refId": "A",
+              "region": "us-east-1",
+              "statistic": "Maximum"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "cloudwatch", "uid": "cloudwatch" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 3 },
+                  { "color": "red", "value": 10 }
+                ]
+              },
+              "unit": "currencyUSD"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+          "id": 11,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "value_and_name"
+          },
+          "title": "管理アカウント サービス別内訳 (今月)",
+          "type": "stat",
+          "targets": [
+            {
+              "alias": "{{ServiceName}}",
+              "dimensions": { "Currency": ["USD"], "LinkedAccount": ["233386024600"], "ServiceName": ["*"] },
+              "expression": "",
+              "matchExact": true,
+              "metricEditorMode": 0,
+              "metricName": "EstimatedCharges",
+              "metricQueryType": 0,
+              "namespace": "AWS/Billing",
+              "period": "86400",
+              "refId": "A",
+              "region": "us-east-1",
+              "statistic": "Maximum"
+            }
+          ]
+        },
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 16 },
+          "id": 102,
+          "title": "メンバーアカウント (016588228762) — サービス別",
+          "type": "row"
+        },
+        {
+          "datasource": { "type": "cloudwatch", "uid": "cloudwatch" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisLabel": "",
+                "drawStyle": "bars",
+                "fillOpacity": 80,
+                "gradientMode": "none",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": { "group": "A", "mode": "normal" }
+              },
+              "unit": "currencyUSD"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 17 },
+          "id": 12,
+          "options": {
+            "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "sortBy": "Last *", "sortDesc": true },
+            "tooltip": { "mode": "multi", "sort": "desc" }
+          },
+          "title": "メンバーアカウント サービス別推移",
+          "type": "timeseries",
+          "targets": [
+            {
+              "alias": "{{ServiceName}}",
+              "dimensions": { "Currency": ["USD"], "LinkedAccount": ["016588228762"], "ServiceName": ["*"] },
+              "expression": "",
+              "matchExact": true,
+              "metricEditorMode": 0,
+              "metricName": "EstimatedCharges",
+              "metricQueryType": 0,
+              "namespace": "AWS/Billing",
+              "period": "86400",
+              "refId": "A",
+              "region": "us-east-1",
+              "statistic": "Maximum"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "cloudwatch", "uid": "cloudwatch" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 3 },
+                  { "color": "red", "value": 10 }
+                ]
+              },
+              "unit": "currencyUSD"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 17 },
+          "id": 13,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "reduceOptions": {
+              "calcs": ["lastNotNull"],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "value_and_name"
+          },
+          "title": "メンバーアカウント サービス別内訳 (今月)",
+          "type": "stat",
+          "targets": [
+            {
+              "alias": "{{ServiceName}}",
+              "dimensions": { "Currency": ["USD"], "LinkedAccount": ["016588228762"], "ServiceName": ["*"] },
+              "expression": "",
+              "matchExact": true,
+              "metricEditorMode": 0,
+              "metricName": "EstimatedCharges",
+              "metricQueryType": 0,
+              "namespace": "AWS/Billing",
+              "period": "86400",
+              "refId": "A",
+              "region": "us-east-1",
+              "statistic": "Maximum"
+            }
+          ]
+        },
+        {
+          "collapsed": false,
+          "gridPos": { "h": 1, "w": 24, "x": 0, "y": 25 },
+          "id": 103,
+          "title": "全体の推移",
+          "type": "row"
+        },
+        {
+          "datasource": { "type": "cloudwatch", "uid": "cloudwatch" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisLabel": "",
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": { "group": "A", "mode": "none" }
+              },
+              "unit": "currencyUSD"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 26 },
+          "id": 4,
+          "options": {
+            "legend": { "calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "bottom" },
+            "tooltip": { "mode": "single", "sort": "none" }
+          },
+          "title": "合計請求額の推移",
+          "type": "timeseries",
+          "targets": [
+            {
+              "alias": "合計",
+              "dimensions": { "Currency": ["USD"] },
+              "expression": "",
+              "matchExact": true,
+              "metricEditorMode": 0,
+              "metricName": "EstimatedCharges",
+              "metricQueryType": 0,
+              "namespace": "AWS/Billing",
+              "period": "21600",
+              "refId": "A",
+              "region": "us-east-1",
+              "statistic": "Maximum"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "cloudwatch", "uid": "cloudwatch" },
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisLabel": "",
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": { "group": "A", "mode": "none" }
+              },
+              "unit": "currencyUSD"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 26 },
+          "id": 5,
+          "options": {
+            "legend": { "calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "bottom" },
+            "tooltip": { "mode": "single", "sort": "none" }
+          },
+          "title": "アカウント別推移",
+          "type": "timeseries",
+          "targets": [
+            {
+              "alias": "管理 (233386024600)",
+              "dimensions": { "Currency": ["USD"], "LinkedAccount": ["233386024600"] },
+              "expression": "",
+              "matchExact": true,
+              "metricEditorMode": 0,
+              "metricName": "EstimatedCharges",
+              "metricQueryType": 0,
+              "namespace": "AWS/Billing",
+              "period": "21600",
+              "refId": "A",
+              "region": "us-east-1",
+              "statistic": "Maximum"
+            },
+            {
+              "alias": "メンバー (016588228762)",
+              "dimensions": { "Currency": ["USD"], "LinkedAccount": ["016588228762"] },
+              "expression": "",
+              "matchExact": true,
+              "metricEditorMode": 0,
+              "metricName": "EstimatedCharges",
+              "metricQueryType": 0,
+              "namespace": "AWS/Billing",
+              "period": "21600",
+              "refId": "B",
+              "region": "us-east-1",
+              "statistic": "Maximum"
+            }
+          ]
+        }
+      ],
+      "schemaVersion": 39,
+      "tags": ["aws", "billing", "cloudwatch"],
+      "templating": { "list": [] },
+      "time": { "from": "now-30d", "to": "now" },
+      "timepicker": {},
+      "timezone": "Asia/Tokyo",
+      "title": "AWS Billing",
+      "uid": "aws-billing",
+      "version": 1
+    }

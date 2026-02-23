@@ -72,6 +72,16 @@ spec:
               memory: 256Mi
           defaultDashboardsEnabled: true
           defaultDashboardsTimezone: Asia/Tokyo
+          envFromSecret: grafana-aws-credentials
+          envValueFrom:
+            AWS_ACCESS_KEY_ID:
+              secretKeyRef:
+                name: grafana-aws-credentials
+                key: AWS_ACCESS_KEY_ID
+            AWS_SECRET_ACCESS_KEY:
+              secretKeyRef:
+                name: grafana-aws-credentials
+                key: AWS_SECRET_ACCESS_KEY
 
         # --- Alertmanager ---
         alertmanager:
