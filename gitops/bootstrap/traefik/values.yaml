@@ -1,6 +1,7 @@
 # Traefik Helm values
 # Chart: traefik/traefik
 # Repo: https://traefik.github.io/charts
+# Tested version: 39.0.2
 
 service:
   type: LoadBalancer

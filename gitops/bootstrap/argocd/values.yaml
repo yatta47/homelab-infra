@@ -1,6 +1,7 @@
 # ArgoCD Helm values
 # Chart: argo/argo-cd
 # Repo: https://argoproj.github.io/argo-helm
+# Tested version: 9.4.4
 
 # TLS は Traefik 側で終端するため ArgoCD は HTTP モードで動作
 server:

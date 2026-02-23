@@ -31,6 +31,8 @@ Traefik を先にインストールする理由: ArgoCD UI の Ingress に必要
 
 ## ブートストラップ手順（CPノードで実行）
 
+> **注意**: helm / kubectl コマンドに `sudo` を付けているのは、k3s の kubeconfig (`/etc/rancher/k3s/k3s.yaml`) が root 所有のため。
+
 ### 1. Traefik インストール
 
 ```bash
@@ -38,6 +40,7 @@ sudo helm repo add traefik https://traefik.github.io/charts
 sudo helm repo update
 sudo helm install traefik traefik/traefik \
   --namespace traefik --create-namespace \
+  --version 39.0.2 \
   -f /path/to/gitops/bootstrap/traefik/values.yaml \
   --wait --timeout 120s
 ```
@@ -56,6 +59,7 @@ sudo helm repo add argo https://argoproj.github.io/argo-helm
 sudo helm repo update
 sudo helm install argocd argo/argo-cd \
   --namespace argocd --create-namespace \
+  --version 9.4.4 \
   -f /path/to/gitops/bootstrap/argocd/values.yaml \
   --wait --timeout 300s
 ```
@@ -81,10 +85,13 @@ sudo kubectl -n argocd get secret argocd-initial-admin-secret \
 
 - ユーザー名: `admin`
 - ブラウザで `http://argocd.homelab.local` にアクセス
+- **重要**: HTTP 通信のためパスワードが平文で流れる。ログイン後すぐに初期パスワードを変更すること
 
 ### 5. App of Apps ルートアプリケーション登録
 
 > **注意**: リポジトリが private の場合、先に ArgoCD UI または CLI で GitHub PAT を登録する必要あり。
+
+> **重要**: `gitops/apps/templates/` に最低1つの Application マニフェストを追加・push してから root-app を適用すること。`prune: true` が有効なため、templates/ が空の状態で適用すると意図しないリソース削除が発生する可能性がある。
 
 ```bash
 sudo kubectl apply -f /path/to/gitops/apps/root-app.yaml

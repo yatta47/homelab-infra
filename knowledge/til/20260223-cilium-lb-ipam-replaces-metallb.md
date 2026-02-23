@@ -12,4 +12,5 @@ MetalLB は 2025-2026 年でもベアメタル LB のデファクトだが、Cil
 
 ## 参考
 
+- https://docs.cilium.io/en/stable/network/lb-ipam/
 - https://docs.rafay.co/blog/2025/06/17/using-cilium-as-a-kubernetes-load-balancer-a-powerful-alternative-to-metallb/
