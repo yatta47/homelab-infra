@@ -33,19 +33,18 @@ spec:
                   resources:
                     requests:
                       storage: 10Gi
-
-        # --- 外部ホスト監視 ---
-        additionalScrapeConfigs:
-          - job_name: "external-node"
-            static_configs:
-              - targets: ["192.168.100.17:9100"]
-                labels:
-                  instance: "devbox"
-          - job_name: "external-systemd"
-            static_configs:
-              - targets: ["192.168.100.17:9558"]
-                labels:
-                  instance: "devbox"
+            # --- 外部ホスト監視 ---
+            additionalScrapeConfigs:
+              - job_name: "external-node"
+                static_configs:
+                  - targets: ["192.168.100.17:9100"]
+                    labels:
+                      instance: "devbox"
+              - job_name: "external-systemd"
+                static_configs:
+                  - targets: ["192.168.100.17:9558"]
+                    labels:
+                      instance: "devbox"
 
         # --- Grafana ---
         grafana:
