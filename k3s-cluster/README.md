@@ -59,8 +59,9 @@ terraform plan
 terraform apply
 # cloud-initの完了まで5〜10分程度かかる
 
-# 5. kubeconfig 取得
-scp ubuntu@192.168.100.101:/etc/rancher/k3s/k3s.yaml ~/.kube/k3s-config
+# 5. kubeconfig 取得（k3s.yaml は root:600 のため sudo 経由）
+ssh ubuntu@192.168.100.101 sudo cat /etc/rancher/k3s/k3s.yaml > ~/.kube/k3s-config
+chmod 600 ~/.kube/k3s-config
 sed -i 's/127.0.0.1/192.168.100.101/' ~/.kube/k3s-config
 export KUBECONFIG=~/.kube/k3s-config
 

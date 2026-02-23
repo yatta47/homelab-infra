@@ -107,12 +107,22 @@ variable "k3s_version" {
   description = "k3sのバージョン (例: v1.31.4+k3s1)"
   type        = string
   default     = "v1.31.4+k3s1"
+
+  validation {
+    condition     = can(regex("^v\\d+\\.\\d+\\.\\d+\\+k3s\\d+$", var.k3s_version))
+    error_message = "k3s_version は v1.31.4+k3s1 の形式で指定してください。"
+  }
 }
 
 variable "helm_version" {
   description = "Helmのバージョン (例: v3.17.1)"
   type        = string
   default     = "v3.17.1"
+
+  validation {
+    condition     = can(regex("^v\\d+\\.\\d+\\.\\d+$", var.helm_version))
+    error_message = "helm_version は v3.17.1 の形式で指定してください。"
+  }
 }
 
 variable "metallb_address_range" {
