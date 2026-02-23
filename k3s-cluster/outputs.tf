@@ -18,8 +18,9 @@ output "ssh_commands" {
 output "kubeconfig_commands" {
   description = "ローカルにkubeconfigを取得するコマンド"
   value       = <<-EOT
-    # kubeconfig を取得
-    scp ${var.vm_user}@${var.k3s_cp_ip}:/etc/rancher/k3s/k3s.yaml ~/.kube/k3s-config
+    # kubeconfig を取得（k3s.yaml は root:600 のため sudo 経由）
+    ssh ${var.vm_user}@${var.k3s_cp_ip} sudo cat /etc/rancher/k3s/k3s.yaml > ~/.kube/k3s-config
+    chmod 600 ~/.kube/k3s-config
     sed -i 's/127.0.0.1/${var.k3s_cp_ip}/' ~/.kube/k3s-config
     export KUBECONFIG=~/.kube/k3s-config
     kubectl get nodes
