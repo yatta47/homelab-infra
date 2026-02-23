@@ -95,6 +95,12 @@ resource "proxmox_virtual_environment_vm" "k3s" {
     dedicated = var.vm_memory
   }
 
+  disk {
+    interface    = "scsi0"
+    size         = var.vm_disk_size
+    datastore_id = var.vm_disk_datastore_id
+  }
+
   network_device {
     bridge = var.network_bridge
   }
