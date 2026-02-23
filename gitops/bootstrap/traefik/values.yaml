@@ -1,0 +1,18 @@
+# Traefik Helm values
+# Chart: traefik/traefik
+# Repo: https://traefik.github.io/charts
+
+service:
+  type: LoadBalancer
+
+# Traefik Dashboard は外部公開しない
+ingressRoute:
+  dashboard:
+    enabled: false
+
+# ログ設定
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true

@@ -1,0 +1,12 @@
+# ArgoCD Helm values
+# Chart: argo/argo-cd
+# Repo: https://argoproj.github.io/argo-helm
+
+# TLS は Traefik 側で終端するため ArgoCD は HTTP モードで動作
+server:
+  extraArgs:
+    - --insecure
+
+configs:
+  params:
+    server.insecure: true

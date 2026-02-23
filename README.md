@@ -7,6 +7,7 @@
 | ディレクトリ | 内容 |
 |-------------|------|
 | `k3s-cluster/` | Proxmox上のk3sクラスターVM（CP1 + Worker2） |
+| `gitops/` | ArgoCD GitOps管理（Traefik / ArgoCD ブートストラップ、App of Apps） |
 
 ## 環境
 
