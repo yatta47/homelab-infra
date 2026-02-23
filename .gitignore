@@ -12,3 +12,6 @@ terraform.tfvars
 
 # Temporary files
 tmp/
+
+# Claude Code
+.claude/reviews/
